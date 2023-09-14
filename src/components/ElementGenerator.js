@@ -30,7 +30,7 @@ const ElementGenerator = ({
             <input
               placeholder="Enter value"
               onChange={(e) => {
-                setValue(e.target.value);
+                setValue(e.target.value, rowIndex, colIndex);
               }}
               value={Value}
             />
@@ -44,7 +44,7 @@ const ElementGenerator = ({
               type="number"
               placeholder="Enter number"
               onChange={(e) => {
-                setValue(e.target.value);
+                setValue(e.target.value, rowIndex, colIndex);
               }}
               value={Value}
             />
@@ -56,9 +56,9 @@ const ElementGenerator = ({
             <SelectComponent
               DropDownID={DropDownID}
               onChange={(e) => {
-                setValue(e.target.value);
+                console.log('e.target.value', e.target.value);
+                setValue(e.target.value, rowIndex, colIndex);
               }}
-              value={Value}
             />
           </div>
         );
@@ -89,7 +89,7 @@ const ElementGenerator = ({
         {dropdownList.map((inst) => (
           <option
             Value={inst.DropDownValueID}
-            selected={inst.DropDownValueID === Value}
+            selected={inst.DropDownValueID == Value}
           >
             {inst.ListItemName}
           </option>
