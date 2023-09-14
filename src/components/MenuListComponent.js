@@ -54,9 +54,28 @@ const MenuListComponent = ({ CategoryID, IsCollection }) => {
 
   const addRow = () => {
     setTableMatrix((previous) => {
-      console.log('previous', previous);
-      previous.push(previous[previous.length - 1]);
-      return previous;
+      let previousCopy = JSON.parse(JSON.stringify(previous));
+      previousCopy.push([
+        ...previousCopy[previousCopy.length - 1],
+        { InputID: 10 },
+      ]);
+      return previousCopy;
+    });
+  };
+
+  const setValue = (val, rowIndex, colIndex) => {
+    setTableMatrix((previous) => {
+      let previousCopy = JSON.parse(JSON.stringify(previous));
+      previousCopy.push(previousCopy[previousCopy.length - 1]);
+      return previousCopy;
+    });
+  };
+
+  const deleteRow = (rowIndex) => {
+    setTableMatrix((previous) => {
+      let previousCopy = JSON.parse(JSON.stringify(previous));
+      previousCopy.splice(rowIndex, 1);
+      return previousCopy;
     });
   };
 
@@ -64,7 +83,7 @@ const MenuListComponent = ({ CategoryID, IsCollection }) => {
     <div>
       <table>
         {tableMatrix.map((row, index) => {
-          if (row?.[0] === undefined) {
+          if (row?.[0] === undefined || row?.[0] === null) {
             return null;
           } else {
             return (
@@ -74,7 +93,7 @@ const MenuListComponent = ({ CategoryID, IsCollection }) => {
                     <th>{Obj?.Name}</th>
                   ) : (
                     <td>
-                      <ElementGenerator {...Obj} />
+                      <ElementGenerator {...Obj} deleteRow={deleteRow} />
                     </td>
                   );
                 })}

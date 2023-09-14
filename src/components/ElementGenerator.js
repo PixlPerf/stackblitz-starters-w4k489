@@ -40,6 +40,9 @@ const ElementGenerator = ({
         );
       case 7:
         return <div>{Name}</div>;
+
+      case 10:
+        return <button>delete</button>;
     }
   };
 
