@@ -112,7 +112,7 @@ const MenuListComponent = ({ CategoryID, IsCollection }) => {
           }
         })}
       </table>
-      {IsCollection ? <button onClick={addRow}> Add New Rows</button> : 'no'}
+      {IsCollection ? <button onClick={addRow}> Add New Rows</button> : ''}
     </div>
   );
 };
