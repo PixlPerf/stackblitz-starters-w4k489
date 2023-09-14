@@ -28,8 +28,6 @@ const MenuListComponent = ({ CategoryID, IsCollection }) => {
   }, []);
 
   const constructTable = (menuList, totalRows, totalColumns) => {
-    console.log('totalRows', totalRows);
-    console.log('totalColumns', totalColumns);
     let tempMatrix = [];
     for (let row = 0; row < totalRows; row++) {
       let columns = [];
@@ -55,10 +53,16 @@ const MenuListComponent = ({ CategoryID, IsCollection }) => {
   const addRow = () => {
     setTableMatrix((previous) => {
       let previousCopy = JSON.parse(JSON.stringify(previous));
-      previousCopy.push([
-        ...previousCopy[previousCopy.length - 1],
-        { InputID: 10 },
-      ]);
+
+      let lastColumn = previousCopy[previousCopy.length - 1].length;
+      if (previousCopy[previousCopy.length - 1][lastColumn - 1].InputID != 10) {
+        previousCopy.push([
+          ...previousCopy[previousCopy.length - 1],
+          { InputID: 10 },
+        ]);
+      } else {
+        previousCopy.push([...previousCopy[previousCopy.length - 1]]);
+      }
       return previousCopy;
     });
   };
@@ -66,7 +70,7 @@ const MenuListComponent = ({ CategoryID, IsCollection }) => {
   const setValue = (val, rowIndex, colIndex) => {
     setTableMatrix((previous) => {
       let previousCopy = JSON.parse(JSON.stringify(previous));
-      previousCopy.push(previousCopy[previousCopy.length - 1]);
+      previousCopy[rowIndex][colIndex].Value = val;
       return previousCopy;
     });
   };
@@ -82,18 +86,24 @@ const MenuListComponent = ({ CategoryID, IsCollection }) => {
   return (
     <div>
       <table>
-        {tableMatrix.map((row, index) => {
+        {tableMatrix.map((row, rowIndex) => {
           if (row?.[0] === undefined || row?.[0] === null) {
             return null;
           } else {
             return (
               <tr>
-                {row.map((Obj) => {
+                {row.map((Obj, colIndex) => {
                   return Obj?.IsHeader === 'Y' ? (
                     <th>{Obj?.Name}</th>
                   ) : (
                     <td>
-                      <ElementGenerator {...Obj} deleteRow={deleteRow} />
+                      <ElementGenerator
+                        {...Obj}
+                        deleteRow={deleteRow}
+                        setValue={setValue}
+                        rowIndex={rowIndex}
+                        colIndex={colIndex}
+                      />
                     </td>
                   );
                 })}

@@ -16,45 +16,83 @@ const ElementGenerator = ({
   IsCollection,
   ADO,
   IsRedundant,
+
+  deleteRow,
+  setValue,
+  rowIndex,
+  colIndex,
 }) => {
   const selectInputType = () => {
     switch (InputID) {
       case 1:
         return (
           <div>
-            <input placeholder="Enter value" />
+            <input
+              placeholder="Enter value"
+              onChange={(e) => {
+                setValue(e.target.value);
+              }}
+              value={Value}
+            />
           </div>
         );
       case 2:
         return (
           <div>
             {' '}
-            <input type="number" placeholder="Enter number" />
+            <input
+              type="number"
+              placeholder="Enter number"
+              onChange={(e) => {
+                setValue(e.target.value);
+              }}
+              value={Value}
+            />
           </div>
         );
       case 3:
         return (
           <div>
-            <SelectComponent DropDownID={DropDownID} />
+            <SelectComponent
+              DropDownID={DropDownID}
+              onChange={(e) => {
+                setValue(e.target.value);
+              }}
+              value={Value}
+            />
           </div>
         );
       case 7:
         return <div>{Name}</div>;
 
       case 10:
-        return <button>delete</button>;
+        return (
+          <button
+            onClick={() => {
+              console.log('rowIndex', rowIndex);
+              deleteRow(rowIndex);
+            }}
+          >
+            delete
+          </button>
+        );
     }
   };
 
-  const SelectComponent = ({ DropDownID }) => {
+  const SelectComponent = ({ DropDownID, onChange }) => {
     let dropdownList = DATA_SOURCE.ItemData.filter(
       (inst) => inst.DropDownID === DropDownID
     ).sort((a, b) => a.DisplayOrder - b.DisplayOrder);
 
     return (
-      <select>
+      <select onChange={onChange}>
         {dropdownList.map((inst) => (
-          <option Value={inst.DropDownValueID}>{inst.ListItemName}</option>
+          <option
+            Value={inst.DropDownValueID}
+            selected={inst.DropDownValueID === Value}
+          >
+            {inst.ListItemName}
+          </option>
         ))}
       </select>
     );
