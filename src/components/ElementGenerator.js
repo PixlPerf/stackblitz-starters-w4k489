@@ -1,30 +1,27 @@
 import React from 'react';
-import { DATA_SOURCE } from './../datasrc/data.js';
+import SelectComponent from './SelectComponent.js';
+
+const INPUT_TYPE = {
+  1: 'TEXT_FIELD',
+  2: 'NUMBER_FIELD',
+  3: 'DROPDOWN',
+  7: 'LABEL',
+  10: 'CUSTOM_DELETE_BTN',
+};
+
 const ElementGenerator = ({
-  CategoryID,
-  ItemID,
   Name,
   InputID,
-  ColumnWiseDisplayOrder,
   DropDownID,
-  IsActive,
-  IsHeader,
-  RowWiseDisplayOrder,
   Value,
-  ListNo,
-  RestaurentID,
-  IsCollection,
-  ADO,
-  IsRedundant,
-
   deleteRow,
   setValue,
   rowIndex,
   colIndex,
 }) => {
   const selectInputType = () => {
-    switch (InputID) {
-      case 1:
+    switch (INPUT_TYPE[InputID]) {
+      case 'TEXT_FIELD':
         return (
           <div>
             <input
@@ -36,10 +33,9 @@ const ElementGenerator = ({
             />
           </div>
         );
-      case 2:
+      case 'NUMBER_FIELD':
         return (
           <div>
-            {' '}
             <input
               type="number"
               placeholder="Enter number"
@@ -50,22 +46,22 @@ const ElementGenerator = ({
             />
           </div>
         );
-      case 3:
+      case 'DROPDOWN':
         return (
           <div>
             <SelectComponent
               DropDownID={DropDownID}
               onChange={(e) => {
-                console.log('e.target.value', e.target.value);
                 setValue(e.target.value, rowIndex, colIndex);
               }}
+              Value={Value}
             />
           </div>
         );
-      case 7:
+      case 'LABEL':
         return <div>{Name}</div>;
 
-      case 10:
+      case 'CUSTOM_DELETE_BTN':
         return (
           <button
             onClick={() => {
@@ -76,26 +72,9 @@ const ElementGenerator = ({
             delete
           </button>
         );
+      default:
+        return <div>{Name}</div>;
     }
-  };
-
-  const SelectComponent = ({ DropDownID, onChange }) => {
-    let dropdownList = DATA_SOURCE.ItemData.filter(
-      (inst) => inst.DropDownID === DropDownID
-    ).sort((a, b) => a.DisplayOrder - b.DisplayOrder);
-
-    return (
-      <select onChange={onChange}>
-        {dropdownList.map((inst) => (
-          <option
-            Value={inst.DropDownValueID}
-            selected={inst.DropDownValueID == Value}
-          >
-            {inst.ListItemName}
-          </option>
-        ))}
-      </select>
-    );
   };
 
   return <div>{selectInputType()}</div>;

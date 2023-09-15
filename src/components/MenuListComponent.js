@@ -1,31 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { DATA_SOURCE } from './../datasrc/data.js';
-
 import ElementGenerator from './ElementGenerator';
 
 const MenuListComponent = ({ CategoryID, IsCollection }) => {
-  let menuList = DATA_SOURCE.Item.filter(
-    (inst) => inst.CategoryID === CategoryID
-  );
-
   let totalColumns = 0;
   let totalRows = 0;
 
   const [tableMatrix, setTableMatrix] = useState([]);
+  let menuList = DATA_SOURCE.Item.filter(
+    (inst) => inst.CategoryID === CategoryID
+  );
 
-  useEffect(() => {
-    menuList.map((inst) => {
-      if (totalColumns < inst.ColumnWiseDisplayOrder) {
-        totalColumns = inst.ColumnWiseDisplayOrder;
-      }
-      if (totalRows < inst.RowWiseDisplayOrder) {
-        totalRows = inst.RowWiseDisplayOrder;
-      }
-    });
-
-    constructTable(menuList, totalRows, totalColumns);
-  }, []);
-
+  // Construct Matrix
   const constructTable = (menuList, totalRows, totalColumns) => {
     let tempMatrix = [];
     for (let row = 0; row < totalRows; row++) {
@@ -54,12 +40,14 @@ const MenuListComponent = ({ CategoryID, IsCollection }) => {
       //Find indexOf which present in last Row & last column
       let lastColumn = previousCopy[previousCopy.length - 1].length;
 
+      // Duplicating last row & Appending Delete Button
       if (previousCopy[previousCopy.length - 1][lastColumn - 1].InputID != 10) {
         previousCopy.push([
           ...previousCopy[previousCopy.length - 1],
           { InputID: 10 },
         ]);
       } else {
+        // Duplicating last row
         previousCopy.push([...previousCopy[previousCopy.length - 1]]);
       }
       return previousCopy;
@@ -82,11 +70,25 @@ const MenuListComponent = ({ CategoryID, IsCollection }) => {
     });
   };
 
+  useEffect(() => {
+    menuList.map((inst) => {
+      if (totalColumns < inst.ColumnWiseDisplayOrder) {
+        totalColumns = inst.ColumnWiseDisplayOrder;
+      }
+      if (totalRows < inst.RowWiseDisplayOrder) {
+        totalRows = inst.RowWiseDisplayOrder;
+      }
+    });
+
+    constructTable(menuList, totalRows, totalColumns);
+  }, []);
+
   return (
     <div>
       <table>
         {tableMatrix.map((row, rowIndex) => {
           if (row?.[0] === undefined || row?.[0] === null) {
+            //Remove Empty Rows
             return null;
           } else {
             return (
@@ -111,7 +113,7 @@ const MenuListComponent = ({ CategoryID, IsCollection }) => {
           }
         })}
       </table>
-      {IsCollection ? <button onClick={addRow}> Add New Rows</button> : ''}
+      {IsCollection && <button onClick={addRow}> Add New Rows</button>}
     </div>
   );
 };

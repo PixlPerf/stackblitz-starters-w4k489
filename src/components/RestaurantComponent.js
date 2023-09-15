@@ -1,15 +1,6 @@
 import React from 'react';
 
-const RestaurantComponent = ({
-  RestaurentID,
-  PlantName,
-  ShowShift,
-  ModificationPeriod,
-  AutoCollection,
-  ReportURI,
-  PlantIsActive,
-  Team,
-}) => {
+const RestaurantComponent = ({ RestaurentID, PlantName }) => {
   return <div>{`${PlantName} - ${RestaurentID}`}</div>;
 };
 
