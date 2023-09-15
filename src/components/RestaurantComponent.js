@@ -10,7 +10,7 @@ const RestaurantComponent = ({
   PlantIsActive,
   Team,
 }) => {
-  return <div>{PlantName}</div>;
+  return <div>{`${PlantName} - ${RestaurentID}`}</div>;
 };
 
 export default RestaurantComponent;

@@ -10,7 +10,6 @@ const MenuListComponent = ({ CategoryID, IsCollection }) => {
 
   let totalColumns = 0;
   let totalRows = 0;
-  // let tableMatrix = [];
 
   const [tableMatrix, setTableMatrix] = useState([]);
 
@@ -39,12 +38,10 @@ const MenuListComponent = ({ CategoryID, IsCollection }) => {
               inst.ColumnWiseDisplayOrder === column + 1
           )
         );
-        console.log('columns', columns);
       }
       tempMatrix.push(columns);
     }
 
-    console.log('tempMatrix', tempMatrix);
     setTableMatrix(() => {
       return tempMatrix;
     });
@@ -54,7 +51,9 @@ const MenuListComponent = ({ CategoryID, IsCollection }) => {
     setTableMatrix((previous) => {
       let previousCopy = JSON.parse(JSON.stringify(previous));
 
+      //Find indexOf which present in last Row & last column
       let lastColumn = previousCopy[previousCopy.length - 1].length;
+
       if (previousCopy[previousCopy.length - 1][lastColumn - 1].InputID != 10) {
         previousCopy.push([
           ...previousCopy[previousCopy.length - 1],
